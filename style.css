@@ -1,79 +1,90 @@
 body {
-  background: black;
-  color: lime;
-  font-family: monospace;
   margin: 0;
   padding: 0;
+  background: black;
+  color: #00FF00;
+  font-family: monospace;
 }
 
-.container {
+#app {
   display: flex;
   height: 100vh;
+  overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 300px;
-  border-right: 2px solid lime;
+#sidebar {
+  width: 260px;
+  border-right: 1px solid #00FF00;
   padding: 10px;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
-/* Main Chat Area */
-.main {
-  flex: 1;
+#main {
+  flex-grow: 1;
   padding: 10px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+button, input, textarea {
+  background: black;
+  color: #00FF00;
+  border: 1px solid #00FF00;
+  font-family: monospace;
+  padding: 6px;
+  margin-bottom: 10px;
+}
+
+input, textarea {
+  width: 100%;
   box-sizing: border-box;
 }
 
-textarea, input {
-  width: 100%;
-  background: black;
-  color: lime;
-  border: 1px solid lime;
-  padding: 5px;
-  margin-bottom: 10px;
-  resize: vertical;
+h1, h2 {
+  margin-top: 0;
+  color: #00FF00;
 }
 
-button {
+#contactsList {
+  margin-top: 10px;
+}
+
+.contact {
+  display: block;
+  padding: 4px;
+  margin-bottom: 4px;
+  border: 1px solid #00FF00;
   background: black;
-  color: lime;
-  border: 1px solid lime;
-  padding: 5px 10px;
-  margin-bottom: 10px;
   cursor: pointer;
 }
 
-button:hover {
-  background: lime;
-  color: black;
+.contact.active {
+  background: #002200;
 }
 
-#chatHeader {
+#chatWindow {
+  flex-grow: 1;
+  border: 1px solid #00FF00;
   margin-bottom: 10px;
-  padding: 5px;
-  border-bottom: 1px solid lime;
-}
-
-#messageList {
-  flex: 1;
   overflow-y: auto;
-  border: 1px solid lime;
   padding: 10px;
-  margin-bottom: 10px;
 }
 
-#messageList p {
-  margin: 5px 0;
+#messageInput {
+  display: flex;
 }
 
-#contactList button {
-  display: block;
-  width: 100%;
-  margin-bottom: 5px;
-  text-align: left;
+#messageInput textarea {
+  flex-grow: 1;
+  margin-right: 5px;
+  height: 60px;
 }
+
+#copyKeyButton {
+  margin-left: 10px;
+  padding: 6px 8px;
+}
+
 
