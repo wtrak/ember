@@ -15,11 +15,46 @@ body {
   width: 250px;
   border-right: 1px solid #00ff00;
   padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   padding: 10px;
+  box-sizing: border-box;
+}
+
+#chatHeader {
+  margin-bottom: 10px;
+}
+
+#chatArea {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 10px;
+}
+
+#messageList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#messageList p {
+  background: #111;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0;
+}
+
+#messageInput {
+  display: flex;
+  flex-direction: column;
 }
 
 textarea, input, button {
@@ -28,6 +63,8 @@ textarea, input, button {
   background: black;
   color: #00ff00;
   border: 1px solid #00ff00;
+  font-family: monospace;
+  box-sizing: border-box;
 }
 
 button {
