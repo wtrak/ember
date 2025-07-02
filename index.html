@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EmberChat</title>
+  <title>EmberChat Keyed Messaging</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
-    <h1>🔥 EmberChat</h1>
-
+    <h1>🟩 EmberChat</h1>
     <div id="keySection">
       <button onclick="generateKey()">Generate New Key</button>
       <p><strong>Your Access Key:</strong></p>
@@ -17,16 +15,18 @@
     </div>
 
     <div id="mainLayout">
-      <div id="threadList">
-        <h2>📂 Threads</h2>
-        <div id="threads"></div>
+      <div id="sidebar">
+        <h2>📇 Contacts</h2>
+        <div id="contactList"></div>
+        <input id="newContactKey" placeholder="Recipient Key" />
+        <input id="newContactName" placeholder="Name" />
+        <button onclick="addContact()">➕ Add Contact</button>
       </div>
 
-      <div id="chatView">
-        <h2>💬 Chat</h2>
-        <div id="chatWith"></div>
-        <div id="chatMessages"></div>
-        <textarea id="msgInput" placeholder="Type your message..."></textarea>
+      <div id="chatArea">
+        <h2 id="chatHeader">💬 Select a Contact</h2>
+        <div id="chatMessages" class="chat-box"></div>
+        <textarea id="chatInput" placeholder="Type message..."></textarea>
         <button onclick="sendMessage()">Send</button>
       </div>
     </div>
@@ -36,3 +36,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
