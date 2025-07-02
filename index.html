@@ -1,29 +1,30 @@
-<div id="app">
-  <div id="sidebar">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EmberChat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
     <h1>🟩 EmberChat</h1>
     <button onclick="generateKey()">Generate New Key</button>
     <p><strong>Your Access Key:</strong></p>
-    <textarea id="myAccessKey" readonly rows="2"></textarea>
+    <textarea id="myKey" readonly></textarea>
 
     <h2>📁 Contacts</h2>
-    <div id="contactsList"></div>
-    <input id="recipientKey" placeholder="Recipient Key" />
-    <input id="contactName" placeholder="Name" />
+    <div id="contacts"></div>
+    <input id="contactKey" placeholder="Recipient Key">
+    <input id="contactName" placeholder="Name">
     <button onclick="addContact()">+ Add Contact</button>
-  </div>
 
-  <div id="main">
-    <div id="chatHeader">
-      <h2 id="chatWith">Select a contact to start chatting.</h2>
-      <div id="peerKeyContainer" style="display:none;">
-        <span id="peerKey"></span>
-        <button id="copyKeyButton" onclick="copyPeerKey()">📋 Copy Key</button>
-      </div>
-    </div>
-    <div id="chatWindow"></div>
-    <div id="messageInput">
-      <textarea id="messageBox" placeholder="Type message..."></textarea>
+    <div id="chat">
+      <h2 id="chatTitle">Select a contact to start chatting.</h2>
+      <div id="messages"></div>
+      <textarea id="messageInput" placeholder="Type message..."></textarea>
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
-</div>
+  <script src="app.js"></script>
+</body>
+</html>
