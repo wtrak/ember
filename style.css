@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #f5f5f5;
+}
+textarea, input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+button {
+  padding: 8px 12px;
+}
+#inbox p, #outbox p {
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
