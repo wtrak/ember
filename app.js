@@ -132,7 +132,7 @@ function renderContacts() {
 
 function sendMessage() {
   if (!currentPeer) return alert("Select a contact first");
-  const raw = document.getElementById('chatInput').value.trim();
+  const raw = document.getElementById('msgInput').value.trim();
   if (!raw) return;
 
   const toKey = contacts[currentPeer].fullKey;
@@ -147,7 +147,7 @@ function sendMessage() {
   conn.on('open', () => conn.send(payload));
 
   threads[peerId].push({ from: myKey, msg: raw, ts: Date.now() });
-  document.getElementById('chatInput').value = '';
+  document.getElementById('msgInput').value = '';
   saveAll();
   renderMessages();
 }
