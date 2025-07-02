@@ -1,62 +1,78 @@
 body {
-  font-family: monospace;
   background: black;
   color: lime;
+  font-family: monospace;
   margin: 0;
-  padding: 20px;
+  padding: 0;
 }
+
 .container {
   display: flex;
   height: 100vh;
 }
-h1, h2 {
-  color: lime;
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  border-right: 2px solid lime;
+  padding: 10px;
+  box-sizing: border-box;
 }
-button, input, textarea {
+
+/* Main Chat Area */
+.main {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+textarea, input {
+  width: 100%;
   background: black;
   color: lime;
   border: 1px solid lime;
+  padding: 5px;
   margin-bottom: 10px;
+  resize: vertical;
 }
-textarea, input {
-  width: 100%;
-  padding: 8px;
-}
+
 button {
-  padding: 8px 12px;
+  background: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 5px 10px;
+  margin-bottom: 10px;
   cursor: pointer;
 }
-#myKey {
-  height: 40px;
+
+button:hover {
+  background: lime;
+  color: black;
 }
-#contacts {
+
+#chatHeader {
   margin-bottom: 10px;
+  padding: 5px;
+  border-bottom: 1px solid lime;
 }
-#contacts button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  margin-bottom: 5px;
-}
-#chat {
+
+#messageList {
   flex: 1;
-  padding-left: 20px;
-  border-left: 1px solid lime;
-}
-#messages {
-  height: 60vh;
   overflow-y: auto;
-  background: #111;
+  border: 1px solid lime;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid lime;
 }
-.message {
+
+#messageList p {
+  margin: 5px 0;
+}
+
+#contactList button {
+  display: block;
+  width: 100%;
   margin-bottom: 5px;
-}
-.message.you {
-  color: cyan;
-}
-.message.them {
-  color: lightgreen;
+  text-align: left;
 }
