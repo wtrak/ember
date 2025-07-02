@@ -2,29 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EmberChat Keyed Messaging</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmberChat</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="app">
     <h1>🔥 EmberChat</h1>
+
     <div id="keySection">
       <button onclick="generateKey()">Generate New Key</button>
       <p><strong>Your Access Key:</strong></p>
       <textarea id="myAccessKey" readonly rows="2"></textarea>
     </div>
 
-    <div id="sendSection">
-      <input id="recipientKey" placeholder="Recipient's Access Key" />
-      <textarea id="msgInput" placeholder="Type your message..." rows="2"></textarea>
-      <button onclick="sendMessage()">Send</button>
+    <div id="mainLayout">
+      <div id="threadList">
+        <h2>📂 Threads</h2>
+        <div id="threads"></div>
+      </div>
+
+      <div id="chatView">
+        <h2>💬 Chat</h2>
+        <div id="chatWith"></div>
+        <div id="chatMessages"></div>
+        <textarea id="msgInput" placeholder="Type your message..."></textarea>
+        <button onclick="sendMessage()">Send</button>
+      </div>
     </div>
-
-    <h2>📥 Inbox</h2>
-    <div id="inbox"></div>
-
-    <h2>📤 Outbox (Pending)</h2>
-    <div id="outbox"></div>
   </div>
 
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
