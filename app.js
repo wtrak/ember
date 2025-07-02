@@ -56,8 +56,15 @@ function initPeer(id) {
         const peerId = parts[1];
 
         if (!contacts[peerId]) {
-          contacts[peerId] = { name: peerId, fullKey: data.from, unreadCount: 0 };
-        }
+  contacts[peerId] = {
+    name: peerId,
+    fullKey: data.from,
+    unreadCount: 0
+  };
+} else {
+  contacts[peerId].fullKey = data.from; // overwrite with most recent full key
+}
+
 
         if (!threads[peerId]) threads[peerId] = [];
         threads[peerId].push({ from: data.from, msg, ts: Date.now() });
@@ -92,7 +99,13 @@ function addContact() {
 function selectContact(peerId) {
   currentPeer = peerId;
   contacts[peerId].unreadCount = 0;
-  document.getElementById('chatHeader').textContent = `💬 Chat with ${contacts[peerId].name}`;
+  const header = document.getElementById('chatHeader');
+header.innerHTML = `
+  💬 Chat with ${contacts[peerId].name}
+  <br><small>Key: ${contacts[peerId].fullKey || 'Unknown'}</small>
+  <button onclick="navigator.clipboard.writeText('${contacts[peerId].fullKey || ''}')">📋 Copy Key</button>
+`;
+
   renderContacts();
   renderMessages();
 }
