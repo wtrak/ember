@@ -23,7 +23,9 @@ function loadAll() {
   threads = JSON.parse(localStorage.getItem(STORAGE_KEYS.THREADS) || '{}');
 
   if (myKey) {
-    document.getElementById('myAccessKey').value = myKey;
+    const myKeyEl = document.getElementById('myAccessKey');
+    if (myKeyEl) myKeyEl.value = myKey;
+
     const parts = myKey.split('-');
     myEncryptionKey = atob(parts[2]);
     initPeer(parts[1]);
@@ -36,7 +38,8 @@ function generateKey() {
   const id = crypto.randomUUID().slice(0, 8);
   myEncryptionKey = crypto.randomUUID().slice(0, 16);
   myKey = `EMBER-${id}-${btoa(myEncryptionKey)}`;
-  document.getElementById('myAccessKey').value = myKey;
+  const myKeyEl = document.getElementById('myAccessKey');
+  if (myKeyEl) myKeyEl.value = myKey;
   initPeer(id);
   saveAll();
 }
@@ -56,20 +59,21 @@ function initPeer(id) {
         const peerId = parts[1];
 
         if (!contacts[peerId]) {
-  contacts[peerId] = {
-    name: peerId,
-    fullKey: data.from,
-    unreadCount: 0
-  };
-} else {
-  contacts[peerId].fullKey = data.from; // overwrite with most recent full key
-}
-
+          contacts[peerId] = {
+            name: peerId,
+            fullKey: data.from,
+            unreadCount: 0
+          };
+        } else {
+          contacts[peerId].fullKey = data.from;
+        }
 
         if (!threads[peerId]) threads[peerId] = [];
         threads[peerId].push({ from: data.from, msg, ts: Date.now() });
 
-        if (peerId !== currentPeer) contacts[peerId].unreadCount = (contacts[peerId].unreadCount || 0) + 1;
+        if (peerId !== currentPeer) {
+          contacts[peerId].unreadCount = (contacts[peerId].unreadCount || 0) + 1;
+        }
 
         saveAll();
         renderContacts();
@@ -80,8 +84,13 @@ function initPeer(id) {
 }
 
 function addContact() {
-  const key = document.getElementById('recipientKey').value.trim();
-  const name = document.getElementById('contactName').value.trim();
+  const keyInput = document.getElementById('recipientKey');
+  const nameInput = document.getElementById('contactName');
+
+  if (!keyInput || !nameInput) return;
+
+  const key = keyInput.value.trim();
+  const name = nameInput.value.trim();
   const parts = key.split('-');
   if (parts.length !== 3) return alert("Invalid key format");
 
@@ -89,23 +98,24 @@ function addContact() {
   contacts[peerId] = { name, fullKey: key, unreadCount: 0 };
   if (!threads[peerId]) threads[peerId] = [];
 
-  document.getElementById('recipientKey').value = '';
-  document.getElementById('contactName').value = '';
+  keyInput.value = '';
+  nameInput.value = '';
 
   saveAll();
   renderContacts();
 }
 
-
 function selectContact(peerId) {
   currentPeer = peerId;
   contacts[peerId].unreadCount = 0;
   const header = document.getElementById('chatHeader');
-header.innerHTML = `
-  💬 Chat with ${contacts[peerId].name}
-  <br><small>Key: ${contacts[peerId].fullKey || 'Unknown'}</small>
-  <button onclick="navigator.clipboard.writeText('${contacts[peerId].fullKey || ''}')">📋 Copy Key</button>
-`;
+  if (header) {
+    header.innerHTML = `
+      💬 Chat with ${contacts[peerId].name}<br>
+      <small>Key: ${contacts[peerId].fullKey || 'Unknown'}</small>
+      <button onclick="navigator.clipboard.writeText('${contacts[peerId].fullKey || ''}')">📋 Copy Key</button>
+    `;
+  }
 
   renderContacts();
   renderMessages();
@@ -113,6 +123,7 @@ header.innerHTML = `
 
 function renderContacts() {
   const container = document.getElementById('contactList');
+  if (!container) return;
   container.innerHTML = '';
 
   const sorted = Object.entries(contacts).sort((a, b) => {
@@ -132,7 +143,10 @@ function renderContacts() {
 
 function sendMessage() {
   if (!currentPeer) return alert("Select a contact first");
-  const raw = document.getElementById('msgInput').value.trim();
+
+  const inputEl = document.getElementById('msgInput');
+  if (!inputEl) return;
+  const raw = inputEl.value.trim();
   if (!raw) return;
 
   const toKey = contacts[currentPeer].fullKey;
@@ -141,19 +155,21 @@ function sendMessage() {
   const encKey = atob(parts[2]);
 
   const encrypted = encrypt(raw, encKey);
-  const conn = peer.connect(peerId);
   const payload = { encrypted, from: myKey };
 
+  const conn = peer.connect(peerId);
   conn.on('open', () => conn.send(payload));
 
   threads[peerId].push({ from: myKey, msg: raw, ts: Date.now() });
-  document.getElementById('msgInput').value = '';
+  inputEl.value = '';
   saveAll();
   renderMessages();
 }
 
 function renderMessages() {
   const container = document.getElementById('chatMessages');
+  if (!container) return;
+
   container.innerHTML = '';
 
   const msgs = threads[currentPeer] || [];
@@ -177,4 +193,7 @@ function decrypt(enc, key) {
   ).join('');
 }
 
-loadAll();
+// Delay loadAll() until DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  loadAll();
+});
