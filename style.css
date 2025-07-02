@@ -1,98 +1,62 @@
 body {
-  margin: 0;
-  padding: 0;
-  background: black;
-  color: #00FF00;
   font-family: monospace;
+  background: black;
+  color: lime;
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  display: flex;
   height: 100vh;
 }
-
-#app {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  overflow: hidden;
+h1, h2 {
+  color: lime;
 }
-
-#sidebar {
-  width: 260px;
-  padding: 10px;
-  box-sizing: border-box;
-  border-right: 1px solid #00FF00;
-  flex-shrink: 0;
-}
-
-#main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-h1, h2, p {
-  margin: 0 0 10px 0;
-  color: #00FF00;
-}
-
 button, input, textarea {
   background: black;
-  color: #00FF00;
-  border: 1px solid #00FF00;
-  font-family: monospace;
-  padding: 6px;
+  color: lime;
+  border: 1px solid lime;
   margin-bottom: 10px;
+}
+textarea, input {
   width: 100%;
-  box-sizing: border-box;
+  padding: 8px;
 }
-
-#contactsList {
-  margin-bottom: 10px;
-}
-
-.contact {
-  display: block;
-  padding: 6px;
-  margin-bottom: 5px;
-  border: 1px solid #00FF00;
+button {
+  padding: 8px 12px;
   cursor: pointer;
 }
-
-.contact.active {
-  background: #002200;
+#myKey {
+  height: 40px;
 }
-
-#chatHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+#contacts {
   margin-bottom: 10px;
 }
-
-#peerKeyContainer {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+#contacts button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 5px;
 }
-
-#chatWindow {
-  flex-grow: 1;
+#chat {
+  flex: 1;
+  padding-left: 20px;
+  border-left: 1px solid lime;
+}
+#messages {
+  height: 60vh;
   overflow-y: auto;
-  border: 1px solid #00FF00;
+  background: #111;
   padding: 10px;
   margin-bottom: 10px;
+  border: 1px solid lime;
 }
-
-#messageInput {
-  display: flex;
-  gap: 5px;
+.message {
+  margin-bottom: 5px;
 }
-
-#messageBox {
-  flex-grow: 1;
-  resize: none;
-  height: 60px;
+.message.you {
+  color: cyan;
 }
-
-
-
+.message.them {
+  color: lightgreen;
+}
