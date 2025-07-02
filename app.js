@@ -167,7 +167,7 @@ function sendMessage() {
 }
 
 function renderMessages() {
-  const container = document.getElementById('chatMessages');
+  const container = document.getElementById('messageList');
   if (!container) return;
 
   container.innerHTML = '';
@@ -179,7 +179,10 @@ function renderMessages() {
     p.textContent = `${who} ${m.msg}`;
     container.appendChild(p);
   });
+
+  container.scrollTop = container.scrollHeight; // Optional: auto-scroll to bottom
 }
+
 
 function encrypt(text, key) {
   return btoa([...text].map((c, i) =>
