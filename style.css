@@ -1,0 +1,35 @@
+body {
+  background-color: black;
+  color: #00ff00;
+  font-family: monospace;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  border-right: 1px solid #00ff00;
+  padding: 10px;
+}
+
+.main {
+  flex: 1;
+  padding: 10px;
+}
+
+textarea, input, button {
+  width: 100%;
+  margin-top: 5px;
+  background: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+}
+
+button {
+  cursor: pointer;
+}
