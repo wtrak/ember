@@ -23,10 +23,20 @@
 
     <!-- Main Chat Panel -->
     <div class="main">
-      <div id="chatHeader"><strong>Select a contact to start chatting.</strong></div>
-      <div id="chatMessages"></div>
-      <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
-      <button onclick="sendMessage()">Send</button>
+      <div id="chatHeader"></div>
+
+      <!-- Home screen -->
+      <div id="homeScreen" class="home-screen">
+        <h2>🟩 Welcome to EmberChat</h2>
+        <p>Select a contact to start encrypted chatting.</p>
+      </div>
+
+      <!-- Chat screen -->
+      <div id="chatScreen" class="chat-screen" style="display: none;">
+        <div id="chatMessages" class="chat-messages"></div>
+        <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
+        <button onclick="sendMessage()">Send</button>
+      </div>
     </div>
   </div>
 
