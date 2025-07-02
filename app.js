@@ -1,43 +1,44 @@
 const STORAGE_KEYS = {
   MY_KEY: 'emberchat-my-key',
-  INBOX: 'emberchat-inbox',
-  OUTBOX: 'emberchat-outbox'
+  CONTACTS: 'emberchat-contacts',
+  THREADS: 'emberchat-threads'
 };
 
 let peer = null;
 let myKey = '';
 let myEncryptionKey = '';
-let outbox = {};
-let inbox = []; // [{from, msg, ts, read}]
-let activeThread = null;
+let contacts = {}; // { peerId: { name, fullKey, unreadCount } }
+let threads = {}; // { peerId: [ { msg, from, ts } ] }
+let currentPeer = '';
 
-function saveData() {
+function saveAll() {
   localStorage.setItem(STORAGE_KEYS.MY_KEY, myKey);
-  localStorage.setItem(STORAGE_KEYS.INBOX, JSON.stringify(inbox));
-  localStorage.setItem(STORAGE_KEYS.OUTBOX, JSON.stringify(outbox));
+  localStorage.setItem(STORAGE_KEYS.CONTACTS, JSON.stringify(contacts));
+  localStorage.setItem(STORAGE_KEYS.THREADS, JSON.stringify(threads));
 }
 
-function loadData() {
+function loadAll() {
   myKey = localStorage.getItem(STORAGE_KEYS.MY_KEY) || '';
-  inbox = JSON.parse(localStorage.getItem(STORAGE_KEYS.INBOX) || '[]');
-  outbox = JSON.parse(localStorage.getItem(STORAGE_KEYS.OUTBOX) || '{}');
+  contacts = JSON.parse(localStorage.getItem(STORAGE_KEYS.CONTACTS) || '{}');
+  threads = JSON.parse(localStorage.getItem(STORAGE_KEYS.THREADS) || '{}');
+
   if (myKey) {
     document.getElementById('myAccessKey').value = myKey;
     const parts = myKey.split('-');
     myEncryptionKey = atob(parts[2]);
     initPeer(parts[1]);
   }
-  renderThreads();
-  renderChat();
+
+  renderContacts();
 }
 
 function generateKey() {
-  const key = crypto.randomUUID().slice(0, 8);
+  const id = crypto.randomUUID().slice(0, 8);
   myEncryptionKey = crypto.randomUUID().slice(0, 16);
-  myKey = `EMBER-${key}-${btoa(myEncryptionKey)}`;
+  myKey = `EMBER-${id}-${btoa(myEncryptionKey)}`;
   document.getElementById('myAccessKey').value = myKey;
-  initPeer(key);
-  saveData();
+  initPeer(id);
+  saveAll();
 }
 
 function initPeer(id) {
@@ -51,21 +52,77 @@ function initPeer(id) {
     conn.on('data', data => {
       if (data.encrypted && data.from) {
         const msg = decrypt(data.encrypted, myEncryptionKey);
-        inbox.push({ from: data.from, msg, ts: Date.now(), read: false });
-        saveData();
-        renderThreads();
-        renderChat();
+        const parts = data.from.split('-');
+        const peerId = parts[1];
+
+        if (!contacts[peerId]) {
+          contacts[peerId] = { name: peerId, fullKey: data.from, unreadCount: 0 };
+        }
+
+        if (!threads[peerId]) threads[peerId] = [];
+        threads[peerId].push({ from: data.from, msg, ts: Date.now() });
+
+        if (peerId !== currentPeer) contacts[peerId].unreadCount = (contacts[peerId].unreadCount || 0) + 1;
+
+        saveAll();
+        renderContacts();
+        if (peerId === currentPeer) renderMessages();
       }
     });
   });
 }
 
-function sendMessage() {
-  const raw = document.getElementById('msgInput').value.trim();
-  if (!activeThread || !raw) return alert("Select a contact and type a message.");
+function addContact() {
+  const key = document.getElementById('newContactKey').value.trim();
+  const name = document.getElementById('newContactName').value.trim();
+  const parts = key.split('-');
+  if (parts.length !== 3) return alert("Invalid key format");
 
-  const parts = activeThread.split('-');
-  if (parts.length !== 3) return alert("Invalid key format.");
+  const peerId = parts[1];
+  contacts[peerId] = { name, fullKey: key, unreadCount: 0 };
+  if (!threads[peerId]) threads[peerId] = [];
+
+  document.getElementById('newContactKey').value = '';
+  document.getElementById('newContactName').value = '';
+
+  saveAll();
+  renderContacts();
+}
+
+function selectContact(peerId) {
+  currentPeer = peerId;
+  contacts[peerId].unreadCount = 0;
+  document.getElementById('chatHeader').textContent = `💬 Chat with ${contacts[peerId].name}`;
+  renderContacts();
+  renderMessages();
+}
+
+function renderContacts() {
+  const container = document.getElementById('contactList');
+  container.innerHTML = '';
+
+  const sorted = Object.entries(contacts).sort((a, b) => {
+    const tA = threads[a[0]]?.slice(-1)[0]?.ts || 0;
+    const tB = threads[b[0]]?.slice(-1)[0]?.ts || 0;
+    return tB - tA;
+  });
+
+  sorted.forEach(([peerId, info]) => {
+    const btn = document.createElement('button');
+    btn.textContent = `${info.name}${info.unreadCount ? ' 🔵' : ''}`;
+    btn.onclick = () => selectContact(peerId);
+    container.appendChild(btn);
+    container.appendChild(document.createElement('br'));
+  });
+}
+
+function sendMessage() {
+  if (!currentPeer) return alert("Select a contact first");
+  const raw = document.getElementById('chatInput').value.trim();
+  if (!raw) return;
+
+  const toKey = contacts[currentPeer].fullKey;
+  const parts = toKey.split('-');
   const peerId = parts[1];
   const encKey = atob(parts[2]);
 
@@ -73,87 +130,37 @@ function sendMessage() {
   const conn = peer.connect(peerId);
   const payload = { encrypted, from: myKey };
 
-  conn.on('open', () => {
-    conn.send(payload);
-    console.log("✅ Sent to", peerId);
-    if (!inbox.some(m => m.from === activeThread && m.msg === raw)) {
-      inbox.push({ from: activeThread, msg: raw, ts: Date.now(), read: true });
-    }
-    document.getElementById('msgInput').value = '';
-    saveData();
-    renderChat();
-    renderThreads();
-  });
+  conn.on('open', () => conn.send(payload));
 
-  conn.on('error', () => {
-    if (!outbox[peerId]) outbox[peerId] = [];
-    outbox[peerId].push(payload);
-    console.log("📨 Queued for", peerId);
-    saveData();
-    renderThreads();
+  threads[peerId].push({ from: myKey, msg: raw, ts: Date.now() });
+  document.getElementById('chatInput').value = '';
+  saveAll();
+  renderMessages();
+}
+
+function renderMessages() {
+  const container = document.getElementById('chatMessages');
+  container.innerHTML = '';
+
+  const msgs = threads[currentPeer] || [];
+  msgs.forEach(m => {
+    const p = document.createElement('p');
+    const who = m.from === myKey ? '🟢 You:' : '🔵 Them:';
+    p.textContent = `${who} ${m.msg}`;
+    container.appendChild(p);
   });
 }
 
 function encrypt(text, key) {
   return btoa([...text].map((c, i) =>
     String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
-  ).join(""));
+  ).join(''));
 }
 
 function decrypt(enc, key) {
   return [...atob(enc)].map((c, i) =>
     String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
-  ).join("");
+  ).join('');
 }
 
-function renderThreads() {
-  const list = document.getElementById('threadList');
-  list.innerHTML = '';
-  const grouped = inbox.reduce((acc, m) => {
-    if (!acc[m.from]) acc[m.from] = [];
-    acc[m.from].push(m);
-    return acc;
-  }, {});
-
-  const sorted = Object.entries(grouped).sort((a, b) => {
-    const lastA = a[1][a[1].length - 1].ts;
-    const lastB = b[1][b[1].length - 1].ts;
-    return lastB - lastA;
-  });
-
-  for (const [sender, msgs] of sorted) {
-    const unread = msgs.some(m => !m.read);
-    const btn = document.createElement('div');
-    btn.className = 'threadButton';
-    if (unread) btn.classList.add('unread');
-    btn.textContent = sender;
-    btn.onclick = () => {
-      activeThread = sender;
-      msgs.forEach(m => m.read = true);
-      saveData();
-      renderChat();
-      renderThreads();
-    };
-    list.appendChild(btn);
-  }
-}
-
-function renderChat() {
-  const view = document.getElementById('chatView');
-  const target = document.getElementById('chatTarget');
-  const box = document.getElementById('chatBox');
-
-  if (!activeThread) {
-    target.textContent = 'No thread selected';
-    box.innerHTML = '';
-    return;
-  }
-
-  target.textContent = activeThread;
-  const msgs = inbox.filter(m => m.from === activeThread);
-  box.innerHTML = msgs.map(m => `<div>${m.read ? '🟢' : '🔵'} ${m.msg}</div>`).join('');
-}
-
-window.onload = loadData;
-window.generateKey = generateKey;
-window.sendMessage = sendMessage;
+loadAll();
