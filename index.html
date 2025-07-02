@@ -2,45 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EmberChat Keyed Messaging</title>
+  <title>EmberChat</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h1>🟩 EmberChat</h1>
-      <button onclick="generateKey()">Generate New Key</button>
-      <p><strong>Your Access Key:</strong></p>
-      <textarea id="myAccessKey" readonly rows="2"></textarea>
+    <h1>🟩 EmberChat</h1>
+    <button onclick="generateKey()">Generate New Key</button>
+    <p><strong>Your Access Key:</strong></p>
+    <textarea id="myKey" readonly></textarea>
 
-      <h3>📂 Contacts</h3>
-      <div id="contactList"></div>
-      <input id="recipientKey" placeholder="Recipient Key" />
-      <input id="contactName" placeholder="Name" />
-      <button onclick="addContact()">+ Add Contact</button>
-    </div>
+    <h2>📁 Contacts</h2>
+    <div id="contacts"></div>
+    <input id="contactKey" placeholder="Recipient Key">
+    <input id="contactName" placeholder="Name">
+    <button onclick="addContact()">+ Add Contact</button>
 
-    <!-- Main Chat Panel -->
-    <div class="main">
-      <div id="chatHeader"></div>
-
-      <!-- Home screen -->
-      <div id="homeScreen" class="home-screen">
-        <h2>🟩 Welcome to EmberChat</h2>
-        <p>Select a contact to start encrypted chatting.</p>
-      </div>
-
-      <!-- Chat screen -->
-      <div id="chatScreen" class="chat-screen" style="display: none;">
-        <div id="chatMessages" class="chat-messages"></div>
-        <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
-        <button onclick="sendMessage()">Send</button>
-      </div>
+    <div id="chat">
+      <h2 id="chatTitle">Select a contact to start chatting.</h2>
+      <div id="messages"></div>
+      <textarea id="messageInput" placeholder="Type message..."></textarea>
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
-
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
