@@ -6,29 +6,27 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app">
-    <h1>🟩 EmberChat</h1>
-    <div id="keySection">
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h1>🟩 EmberChat</h1>
       <button onclick="generateKey()">Generate New Key</button>
       <p><strong>Your Access Key:</strong></p>
       <textarea id="myAccessKey" readonly rows="2"></textarea>
+
+      <h3>📂 Contacts</h3>
+      <div id="contactList"></div>
+      <input id="recipientKey" placeholder="Recipient Key" />
+      <input id="contactName" placeholder="Name" />
+      <button onclick="addContact()">+ Add Contact</button>
     </div>
 
-    <div id="mainLayout">
-      <div id="sidebar">
-        <h2>📇 Contacts</h2>
-        <div id="contactList"></div>
-        <input id="newContactKey" placeholder="Recipient Key" />
-        <input id="newContactName" placeholder="Name" />
-        <button onclick="addContact()">➕ Add Contact</button>
-      </div>
-
-      <div id="chatArea">
-        <h2 id="chatHeader">💬 Select a Contact</h2>
-        <div id="chatMessages" class="chat-box"></div>
-        <textarea id="chatInput" placeholder="Type message..."></textarea>
-        <button onclick="sendMessage()">Send</button>
-      </div>
+    <!-- Main Chat Panel -->
+    <div class="main">
+      <div id="chatHeader"><strong>Select a contact to start chatting.</strong></div>
+      <div id="messageList"></div>
+      <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
 
@@ -36,4 +34,5 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
