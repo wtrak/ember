@@ -32,6 +32,9 @@ function loadAll() {
   }
 
   renderContacts();
+  document.getElementById('homeScreen').style.display = 'flex';
+document.getElementById('chatScreen').style.display = 'none';
+
 }
 
 function generateKey() {
@@ -117,8 +120,11 @@ function selectContact(peerId) {
     `;
   }
 
-  renderContacts();
-  renderMessages();
+  document.getElementById('homeScreen').style.display = 'none';
+document.getElementById('chatScreen').style.display = 'flex';
+renderContacts();
+renderMessages();
+
 }
 
 function renderContacts() {
