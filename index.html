@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>EmberChat Keyed Messaging</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h1>🟩 EmberChat</h1>
-      <button onclick="generateKey()">Generate New Key</button>
-      <p><strong>Your Access Key:</strong></p>
-      <textarea id="myAccessKey" readonly rows="2"></textarea>
+<div id="app">
+  <div id="sidebar">
+    <h1>🟩 EmberChat</h1>
+    <button onclick="generateKey()">Generate New Key</button>
+    <p><strong>Your Access Key:</strong></p>
+    <textarea id="myAccessKey" readonly rows="2"></textarea>
 
-      <h3>📂 Contacts</h3>
-      <div id="contactList"></div>
-      <input id="recipientKey" placeholder="Recipient Key" />
-      <input id="contactName" placeholder="Name" />
-      <button onclick="addContact()">+ Add Contact</button>
+    <h2>📁 Contacts</h2>
+    <div id="contactsList"></div>
+    <input id="recipientKey" placeholder="Recipient Key" />
+    <input id="contactName" placeholder="Name" />
+    <button onclick="addContact()">+ Add Contact</button>
+  </div>
+
+  <div id="main">
+    <div id="chatHeader">
+      <h2 id="chatWith">Select a contact to start chatting.</h2>
+      <div id="peerKeyContainer" style="display:none;">
+        <span id="peerKey"></span>
+        <button id="copyKeyButton" onclick="copyPeerKey()">📋 Copy Key</button>
+      </div>
     </div>
-
-    <!-- Main Chat Panel -->
-    <div class="main">
-      <div id="chatHeader"><strong>Select a contact to start chatting.</strong></div>
-      <div id="messageList"></div>
-      <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
+    <div id="chatWindow"></div>
+    <div id="messageInput">
+      <textarea id="messageBox" placeholder="Type message..."></textarea>
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
-
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
-
-
+</div>
