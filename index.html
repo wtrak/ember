@@ -26,12 +26,14 @@
   <div id="chatHeader"><strong>Select a contact to start chatting.</strong></div>
 
   <div id="chatArea">
-    <div id="messageList"></div>
-  </div>
+    <div id="chatArea">
+  <div id="messageList"></div>
+</div>
+<div id="messageInput">
+  <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
+  <button onclick="sendMessage()">Send</button>
+</div>
 
-  <div id="messageInput">
-    <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
-    <button onclick="sendMessage()">Send</button>
   </div>
 </div>
 
