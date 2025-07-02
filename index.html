@@ -23,12 +23,18 @@
 
     <!-- Main Chat Panel -->
     <div class="main">
-      <div id="chatHeader"><strong>Select a contact to start chatting.</strong></div>
-      <div id="chatMessages"></div>
-      <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
-      <button onclick="sendMessage()">Send</button>
-    </div>
+  <div id="chatHeader"><strong>Select a contact to start chatting.</strong></div>
+
+  <div id="chatArea">
+    <div id="messageList"></div>
   </div>
+
+  <div id="messageInput">
+    <textarea id="msgInput" placeholder="Type message..." rows="2"></textarea>
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
 
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <script src="app.js"></script>
