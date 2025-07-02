@@ -80,8 +80,8 @@ function initPeer(id) {
 }
 
 function addContact() {
-  const key = document.getElementById('newContactKey').value.trim();
-  const name = document.getElementById('newContactName').value.trim();
+  const key = document.getElementById('recipientKey').value.trim();
+  const name = document.getElementById('contactName').value.trim();
   const parts = key.split('-');
   if (parts.length !== 3) return alert("Invalid key format");
 
@@ -89,12 +89,13 @@ function addContact() {
   contacts[peerId] = { name, fullKey: key, unreadCount: 0 };
   if (!threads[peerId]) threads[peerId] = [];
 
-  document.getElementById('newContactKey').value = '';
-  document.getElementById('newContactName').value = '';
+  document.getElementById('recipientKey').value = '';
+  document.getElementById('contactName').value = '';
 
   saveAll();
   renderContacts();
 }
+
 
 function selectContact(peerId) {
   currentPeer = peerId;
