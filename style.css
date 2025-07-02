@@ -4,28 +4,35 @@ body {
   background: black;
   color: #00FF00;
   font-family: monospace;
+  height: 100vh;
 }
 
 #app {
   display: flex;
+  flex-direction: row;
   height: 100vh;
   overflow: hidden;
 }
 
 #sidebar {
   width: 260px;
-  border-right: 1px solid #00FF00;
   padding: 10px;
   box-sizing: border-box;
+  border-right: 1px solid #00FF00;
   flex-shrink: 0;
 }
 
 #main {
   flex-grow: 1;
-  padding: 10px;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+h1, h2, p {
+  margin: 0 0 10px 0;
+  color: #00FF00;
 }
 
 button, input, textarea {
@@ -35,28 +42,19 @@ button, input, textarea {
   font-family: monospace;
   padding: 6px;
   margin-bottom: 10px;
-}
-
-input, textarea {
   width: 100%;
   box-sizing: border-box;
 }
 
-h1, h2 {
-  margin-top: 0;
-  color: #00FF00;
-}
-
 #contactsList {
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .contact {
   display: block;
-  padding: 4px;
-  margin-bottom: 4px;
+  padding: 6px;
+  margin-bottom: 5px;
   border: 1px solid #00FF00;
-  background: black;
   cursor: pointer;
 }
 
@@ -64,27 +62,37 @@ h1, h2 {
   background: #002200;
 }
 
+#chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#peerKeyContainer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 #chatWindow {
   flex-grow: 1;
-  border: 1px solid #00FF00;
-  margin-bottom: 10px;
   overflow-y: auto;
+  border: 1px solid #00FF00;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 #messageInput {
   display: flex;
+  gap: 5px;
 }
 
-#messageInput textarea {
+#messageBox {
   flex-grow: 1;
-  margin-right: 5px;
+  resize: none;
   height: 60px;
 }
 
-#copyKeyButton {
-  margin-left: 10px;
-  padding: 6px 8px;
-}
 
 
